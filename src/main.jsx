@@ -8,4 +8,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>
 );
-fix import path from app
+fix syntax error in main.jsx
