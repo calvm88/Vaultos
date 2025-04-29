@@ -4,7 +4,7 @@ export default function VaultLandingPage({ onEnterVault }) {
   const [showIntro, setShowIntro] = useState(true);
 
   return (
-    <div className="min-h-screen bg-black flex flex-col justify-center items-center text-green-300 font-mono p-8">
+    <div className="min-h-screen bg-black flex flex-col justify-center items-center text-green-300 font-mono">
       {showIntro ? (
         <div className="text-center space-y-6 animate-fadeIn">
           <h1 className="text-4xl md:text-6xl font-bold">Welcome to VaultOS</h1>
