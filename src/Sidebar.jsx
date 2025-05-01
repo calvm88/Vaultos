@@ -1,7 +1,10 @@
-import { useState } from 'react'; import Sidebar from './Sidebar'; import CentralPanel from './CentralPanel'; import VaultLandingPage from './VaultLandingPage';
+// src/Sidebar.jsx import { useEffect, useState } from 'react';
 
-export default function App() { const [enteredVault, setEnteredVault] = useState(false); const [activeTab, setActiveTab] = useState('GAMES');
+const TABS = [ 'GAMES', 'VAULTBANK', 'FRIENDS', 'STORE', 'SYSTEM SETTINGS', 'STREAM', 'EDITOR', 'RELICS', 'ACHIEVEMENTS', 'VAULTFEED' ];
 
-return ( <div className="min-h-screen bg-black text-green-400 font-mono"> {enteredVault ? ( <div className="flex h-screen"> <Sidebar setActiveTab={setActiveTab} onXP={() => {}} /> <CentralPanel activeTab={activeTab} /> </div> ) : ( <VaultLandingPage onEnterVault={() => setEnteredVault(true)} /> )} </div> ); }
+export default function Sidebar({ activeTab, setActiveTab }) { const [selected, setSelected] = useState(() => localStorage.getItem('activeTab') || 'GAMES');
 
+useEffect(() => { setActiveTab(selected); localStorage.setItem('activeTab', selected); }, [selected]);
+
+return ( <div className="flex flex-col space-y-2"> {TABS.map(tab => ( <button key={tab} className={px-4 py-2 text-left border rounded transition-all duration-300 ${ selected === tab ? 'bg-green-700 text-white font-bold shadow-lg' : 'bg-green-100 text-green-800 hover:bg-green-300' }} onClick={() => setSelected(tab)} > {tab} </button> ))} </div> ); }
 
