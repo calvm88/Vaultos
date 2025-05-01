@@ -1,10 +1,10 @@
-// src/Sidebar.jsx import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-const TABS = [ 'GAMES', 'VAULTBANK', 'FRIENDS', 'STORE', 'SYSTEM SETTINGS', 'STREAM', 'EDITOR', 'RELICS', 'ACHIEVEMENTS', 'VAULTFEED' ];
+export default function Sidebar({ activeTab, setActiveTab }) { const tabs = [ 'GAMES', 'VAULTBANK', 'FRIENDS', 'STORE', 'SYSTEM SETTINGS', 'STREAM', 'EDITOR', 'RELICS', 'ACHIEVEMENTS', 'VAULTFEED' ];
 
-export default function Sidebar({ activeTab, setActiveTab }) { const [selected, setSelected] = useState(() => localStorage.getItem('activeTab') || 'GAMES');
+useEffect(() => { const stored = localStorage.getItem('activeTab'); if (stored) setActiveTab(stored); }, []);
 
-useEffect(() => { setActiveTab(selected); localStorage.setItem('activeTab', selected); }, [selected]);
+const handleTabClick = (tab) => { setActiveTab(tab); localStorage.setItem('activeTab', tab); };
 
-return ( <div className="flex flex-col space-y-2"> {TABS.map(tab => ( <button key={tab} className={px-4 py-2 text-left border rounded transition-all duration-300 ${ selected === tab ? 'bg-green-700 text-white font-bold shadow-lg' : 'bg-green-100 text-green-800 hover:bg-green-300' }} onClick={() => setSelected(tab)} > {tab} </button> ))} </div> ); }
+return ( <div className="flex flex-col space-y-2 animate-fadeIn"> {tabs.map((tab) => ( <button key={tab} onClick={() => handleTabClick(tab)} className={px-4 py-2 text-left rounded shadow-sm transition-all duration-200 font-bold text-sm tracking-wide ${activeTab === tab ? 'bg-green-800 text-white scale-105 shadow-md' : 'bg-green-950 text-green-400 hover:bg-green-800 hover:text-white hover:scale-105'}} > {tab} </button> ))} </div> ); }
 
