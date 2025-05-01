@@ -1,24 +1,6 @@
-import { useState } from 'react';
-import Sidebar from './Sidebar';
-import CentralPanel from './CentralPanel';
-import VaultLandingPage from './VaultLandingPage';
-import { AnimatePresence } from 'framer-motion';
+// src/App.jsx import { useState } from 'react'; import Sidebar from './Sidebar'; import CentralPanel from './CentralPanel'; import VaultLandingPage from './VaultLandingPage';
 
-export default function App() {
-  const [enteredVault, setEnteredVault] = useState(false);
+export default function App() { const [enteredVault, setEnteredVault] = useState(false); const [activeTab, setActiveTab] = useState('XP');
 
-  return (
-    <div className="min-h-screen bg-black text-green-400 font-mono">
-      <AnimatePresence mode="wait">
-        {enteredVault ? (
-          <div key="vault" className="flex h-screen">
-            <Sidebar setActiveTab={() => {}} onXP={() => {}} />
-            <CentralPanel />
-          </div>
-        ) : (
-          <VaultLandingPage key="landing" onEnterVault={() => setEnteredVault(true)} />
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
+return ( <div className="min-h-screen bg-black text-green-400 font-mono"> {enteredVault ? ( <div className="flex h-screen"> <Sidebar setActiveTab={setActiveTab} activeTab={activeTab} /> <CentralPanel activeTab={activeTab} /> </div> ) : ( <VaultLandingPage onEnterVault={() => setEnteredVault(true)} /> )} </div> ); }
+
