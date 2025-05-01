@@ -1,20 +1,8 @@
-export default function Sidebar({ setActiveTab, onXP }) {
-  const tabs = ['GAMES', 'VAULTBANK', 'FRIENDS', 'STORE', 'SYSTEM SETTINGS'];
+import { useState } from 'react'; import Sidebar from './Sidebar'; import CentralPanel from './CentralPanel'; import VaultLandingPage from './VaultLandingPage';
 
-  return (
-    <div className="w-1/5 bg-green-900 p-4 space-y-4">
-      {tabs.map((tab) => (
-        <button
-          key={tab}
-          onClick={() => {
-            setActiveTab(tab);
-            onXP(5, `Switched to ${tab}`);
-          }}
-          className="w-full bg-green-700 hover:bg-green-600 text-black py-2 rounded-lg font-bold"
-        >
-          {tab}
-        </button>
-      ))}
-    </div>
-  );
-}
+export default function App() { const [enteredVault, setEnteredVault] = useState(false); const [activeTab, setActiveTab] = useState('GAMES');
+
+const renderPanel = () => { switch (activeTab) { case 'GAMES': return <CentralPanel />; case 'VAULTBANK': return <div className="p-4">VaultBank coming soon!</div>; case 'FRIENDS': return <div className="p-4">Friends feature coming soon!</div>; case 'STORE': return <div className="p-4">Store coming soon!</div>; case 'SYSTEM SETTINGS': return <div className="p-4">Settings coming soon!</div>; default: return <CentralPanel />; } };
+
+return ( <div className="min-h-screen bg-black text-green-400 font-mono"> {enteredVault ? ( <div className="flex h-screen"> <Sidebar setActiveTab={setActiveTab} onXP={() => {}} /> <div className="flex-grow p-4 overflow-auto"> {renderPanel()} </div> </div> ) : ( <VaultLandingPage onEnterVault={() => setEnteredVault(true)} /> )} </div> ); }
+
