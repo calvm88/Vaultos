@@ -6,23 +6,22 @@ useEffect(() => { play(); }, []);
 
 useEffect(() => { localStorage.setItem('vaultFeed', JSON.stringify(vaultFeed)); }, [vaultFeed]); useEffect(() => { localStorage.setItem('xp', xp.toString()); }, [xp]); useEffect(() => { localStorage.setItem('achievements', JSON.stringify(achievements)); }, [achievements]); useEffect(() => { localStorage.setItem('toasts', JSON.stringify(toasts)); }, [toasts]); useEffect(() => { localStorage.setItem('relics', JSON.stringify(relics)); }, [relics]);
 
-function gainXP(amount, reason) { const msg = ${amount} XP: ${reason}; setXP(prev => prev + amount); setVaultFeed(prev => [...prev, { type: 'XP', message: msg }]); setToasts(prev => [...prev, { type: 'XP', message: msg }]);
+function addToFeed(type, message, amount = null) { setVaultFeed(prev => [...prev, { type, message, amount, timestamp: Date.now() }]); }
 
-const nextXP = xp + amount;
-if (nextXP >= 100 && !achievements.includes('First Level Up')) {
-  const unlock = 'Achievement: First Level Up!';
+function gainXP(amount, reason) { setXP(prev => prev + amount); addToFeed('XP', +${amount} XP: ${reason}, amount); setToasts(prev => [...prev, +${amount} XP!]);
+
+if (xp + amount >= 100 && !achievements.includes('First Level Up')) {
   setAchievements(prev => [...prev, 'First Level Up']);
-  setVaultFeed(prev => [...prev, { type: 'ACHIEVEMENT', message: unlock }]);
-  setToasts(prev => [...prev, { type: 'ACHIEVEMENT', message: unlock }]);
+  setToasts(prev => [...prev, 'Achievement: First Level Up!']);
 }
 
 }
 
-function inviteFriend(friend) { const msg = Party invite sent to ${friend}; setPartyInvites(prev => [...prev, friend]); setVaultFeed(prev => [...prev, { type: 'FRIEND', message: msg }]); setToasts(prev => [...prev, { type: 'FRIEND', message: msg }]); }
+function inviteFriend(friend) { setPartyInvites(prev => [...prev, friend]); addToFeed('FRIEND', Party invite sent to ${friend}); }
 
-function unlockRelic(name) { const msg = Relic equipped: ${name}; setRelics(prev => [...prev, name]); setVaultFeed(prev => [...prev, { type: 'RELIC', message: msg }]); setToasts(prev => [...prev, { type: 'RELIC', message: msg }]); }
+function unlockRelic(name) { setRelics(prev => [...prev, name]); addToFeed('RELIC', Relic equipped: ${name}); }
 
-return ( <div className="flex flex-col flex-1 p-6 gap-4 overflow-y-auto relative"> <VaultToastPanel toasts={toasts.slice(-3)} setToasts={setToasts} /> <VaultXP xp={xp} setXP={setXP} />
+return ( <div className="flex flex-col flex-1 p-6 gap-4 overflow-y-auto relative"> <VaultToastPanel toasts={toasts.slice(-3)} /> <VaultXP xp={xp} setXP={setXP} />
 
 {activeTab === 'GAMES' && (
     <div className="text-green-400 text-xl">Game Library coming soon!</div>
