@@ -1,20 +1,20 @@
-import { useState } from 'react'; import TamAI from './TamAI';
+// src/Sidebar.jsx import { useEffect, useState } from 'react';
 
-const tabs = [ { label: 'GAMES', icon: '🎮' }, { label: 'VAULTBANK', icon: '🏦' }, { label: 'FRIENDS', icon: '🧑‍🤝‍🧑' }, { label: 'STORE', icon: '🛒' }, { label: 'SYSTEM SETTINGS', icon: '⚙️' }, { label: 'STREAM', icon: '📺' }, { label: 'EDITOR', icon: '✏️' }, { label: 'RELICS', icon: '💠' }, { label: 'ACHIEVEMENTS', icon: '🏆' }, { label: 'VAULTFEED', icon: '📜' } ];
+export default function Sidebar({ activeTab, setActiveTab, onXP, TamAI }) { const tabs = [ 'GAMES', 'VAULTBANK', 'FRIENDS', 'STORE', 'STREAM', 'EDITOR', 'RELICS', 'ACHIEVEMENTS', 'VAULTFEED', 'SYSTEM SETTINGS' ];
 
-export default function Sidebar({ activeTab, setActiveTab, onXP, setVaultFeed }) { const [skins, setSkins] = useState( JSON.parse(localStorage.getItem('tabSkins')) || {} );
+const [lastVisited, setLastVisited] = useState(() => localStorage.getItem('lastTab') || 'GAMES');
 
-const handleTabClick = (label) => { setActiveTab(label); onXP(3, Accessed ${label}); setVaultFeed((prev) => [...prev, { type: 'SYSTEM', message: Switched to ${label} }]);
+useEffect(() => { if (activeTab !== lastVisited) { localStorage.setItem('lastTab', activeTab); setLastVisited(activeTab); } }, [activeTab]);
 
-if (label === 'SYSTEM SETTINGS') TamAI.speak('Adjusting Vault protocols.');
-else if (label === 'STREAM') TamAI.speak('VaultStream mode activated.');
-else if (label === 'EDITOR') TamAI.speak('Opening VaultEditor Pro...');
-else if (label === 'RELICS') TamAI.speak('Equipping new VaultRelics.');
-else TamAI.speak(`Accessing ${label}`);
+const handleClick = (label) => { setActiveTab(label); onXP(2, Accessed ${label});
+
+if (label === 'SYSTEM SETTINGS') TamAI.speak('Mod protocols unlocked. Adjust with care.');
+if (label === 'VAULTBANK') TamAI.speak('VaultChip metrics engaged.');
+if (label === 'VAULTFEED') TamAI.speak('Scanning recent echoes...');
+if (label === 'STREAM') TamAI.speak('VaultStream panel opened. Broadcasting prep...');
+if (label === 'RELICS' && Math.random() > 0.95) TamAI.speak('Did you feel that? A relic stirred.');
 
 };
 
-const getTabClasses = (label) => { const isActive = label === activeTab; const skinClass = skins[label] || ''; return rounded-lg px-4 py-2 mb-2 text-sm font-bold border border-green-600 transition-all duration-300 shadow-md cursor-pointer text-left hover:bg-green-800 ${ isActive ? 'bg-green-700 text-white' : 'bg-green-900 text-green-300' } ${skinClass}; };
-
-return ( <div className="flex flex-col"> {tabs.map(({ label, icon }) => ( <button key={label} onClick={() => handleTabClick(label)} className={getTabClasses(label)} > {icon} {label} </button> ))} </div> ); }
+return ( <div className="flex flex-col gap-3 animate-fadeIn"> {tabs.map((label) => ( <button key={label} onClick={() => handleClick(label)} className={rounded-lg px-4 py-2 text-sm font-bold border border-green-600 shadow transition-all duration-300 hover:scale-105 hover:shadow-xl ${ activeTab === label ? 'bg-green-700 text-white' : 'bg-green-900 text-green-300 hover:bg-green-700' }} > {label} </button> ))} </div> ); }
 
