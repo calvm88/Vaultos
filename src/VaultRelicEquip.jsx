@@ -4,11 +4,11 @@ const relicsData = [ { name: 'Glitchcore Frame', rarity: 'Legendary', descriptio
 
 const rarityColors = { Common: 'border-gray-500', Rare: 'border-blue-400', Epic: 'border-pink-400', Legendary: 'border-yellow-400', };
 
-export default function VaultRelicEquip({ relics = [], setRelics = () => {}, setVaultFeed = () => {}, setToasts = () => {}, setTheme = () => {} }) { const [equipped, setEquipped] = useState(localStorage.getItem('equippedRelic') || null); const [filter, setFilter] = useState('ALL'); const [play] = useSound(equipSound);
+export default function VaultRelicEquip({ relics = [], setRelics = () => {}, setFeed = () => {}, setToasts = () => {}, setTheme = () => {} }) { const [equipped, setEquipped] = useState(localStorage.getItem('equippedRelic') || null); const [filter, setFilter] = useState('ALL'); const [play] = useSound(equipSound);
 
-useEffect(() => { localStorage.setItem('equippedRelic', equipped); if (equipped) { setVaultFeed(prev => [...prev, { type: 'RELIC', message: Relic equipped: ${equipped}, time: Date.now() }]); setToasts(prev => [...prev, Relic equipped: ${equipped}]); setTheme(equipped); // Optional hook for UI skin change } }, [equipped]);
+useEffect(() => { localStorage.setItem('equippedRelic', equipped); }, [equipped]);
 
-const handleEquip = (name) => { setEquipped(name); play(); };
+const handleEquip = (name) => { setEquipped(name); play(); setFeed(prev => [...prev, { type: 'RELIC', message: Relic equipped: ${name}, time: Date.now() }]); setToasts(prev => [...prev, Equipped ${name}]); setTheme(name); };
 
 const filtered = filter === 'ALL' ? relicsData : relicsData.filter(r => r.rarity === filter);
 
@@ -18,7 +18,7 @@ return ( <div className="p-4 bg-[#031d14] rounded-xl border border-green-600 sha
     {filtered.map((relic) => (
       <div
         key={relic.name}
-        className={`relative p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 group ${rarityColors[relic.rarity]} ${equipped === relic.name ? 'ring-2 ring-yellow-400 animate-pulse' : ''}`}
+        className={`relative p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 group ${rarityColors[relic.rarity]} ${equipped === relic.name ? 'ring-2 ring-yellow-400' : ''}`}
         onClick={() => handleEquip(relic.name)}
       >
         <div className="text-sm font-bold text-green-200 flex items-center gap-1">
@@ -27,7 +27,7 @@ return ( <div className="p-4 bg-[#031d14] rounded-xl border border-green-600 sha
         <div className="text-xs text-green-500 italic">{relic.rarity}</div>
         <div className="text-xs text-green-400 mt-1">{relic.description}</div>
         {equipped === relic.name && (
-          <div className="absolute bottom-2 right-2 text-yellow-300 text-xs flex items-center gap-1">
+          <div className="absolute bottom-2 right-2 animate-pulse text-yellow-300 text-xs flex items-center gap-1">
             <Sparkles size={12} /> Equipped
           </div>
         )}
